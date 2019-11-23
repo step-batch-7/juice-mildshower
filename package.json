@@ -4,11 +4,13 @@
   "description": "Beverage App for Anna Juice Ltd",
   "main": "beverage.js",
   "scripts": {
-    "test": "mocha"
+    "start": "node beverage.js",
+    "test": "nyc mocha"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^6.2.2"
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1"
   }
 }
