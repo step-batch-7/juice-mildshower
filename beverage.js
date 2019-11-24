@@ -1,11 +1,20 @@
 const utils = require("./src/utils.js");
-const recordSystem = require("./src/recordSystem.js");
+const transaction = require("./src/transaction.js");
+const fs = require("fs");
 
 const main = function() {
   const userArgs = process.argv.slice(2);
-
-  const dateStamp = new Date();
-  const transactionDetails = recordSystem.performTransaction(path, userArgs, dateStamp);
-  const printableStr = utils.getPrintableStr[process.argv[2]](transactionDetails);
-  console.log(printableStr);
+  const path = "./beverageConsumption.json";
+  const message = transaction.performTransaction(
+    path,
+    fs.readFileSync,
+    fs.existsSync,
+    userArgs,
+    function() {
+      return new Date();
+    }
+  );
+  console.log(message);
 };
+
+main();
