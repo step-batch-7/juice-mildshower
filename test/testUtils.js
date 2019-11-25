@@ -56,12 +56,21 @@ describe("getSaveMsg()", function() {
 
 describe("getQueryMsg", function() {
   it("should give all given records in a string format with total quantity count", function() {
-    const actualValue = utils.getQueryMsg([
-      { beverage: "Orng", qty: 2, date: "2019-11-23T20:19:53.166Z", empId: "111" },
-      { beverage: "banana", qty: 4, date: "2019-11-23T20:19:53.166Z", empId: "111" }
-    ]);
+    const actualValue = utils.getQueryMsg({
+      empId: "111",
+      orders: [
+        { beverage: "Orng", qty: 2, date: "2019-11-23T20:19:53.166Z" },
+        { beverage: "banana", qty: 4, date: "2019-11-23T20:19:53.166Z" }
+      ]
+    });
     const expectedValue =
       "Employee ID,Beverage,Quantity,Date\n111,Orng,2,2019-11-23T20:19:53.166Z\n111,banana,4,2019-11-23T20:19:53.166Z\nTotal: 6 Juices";
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give no data message if no record is provided", function() {
+    const actualValue = utils.getQueryMsg({ empId: "000", orders: [] });
+    const expectedValue = "No record for the employee";
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
