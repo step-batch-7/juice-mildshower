@@ -1,34 +1,41 @@
 const utils = require("./utils.js");
+const handleInsput = require("./handleInput.js");
 
-const makeTransactionEntry = function(transactionRecords, transactionDetail, dateFunc) {
+const saveTransaction = function(transactionRecords, transactionDetail, dateFunc) {
   const { empId, beverage, qty } = transactionDetail;
   const date = dateFunc();
   const record = { beverage, qty, date };
   transactionRecords[empId] = transactionRecords[empId] || { empId, orders: [] };
   transactionRecords[empId].orders.push(record);
-  return { transactionRecords, cmdSpecificData: { empId, beverage, qty, date } };
+  return { transactionRecords, insertedRecord: { empId, beverage, qty, date } };
 };
 
 const performQuery = function(transactionRecords, userArgs) {
   const { empId } = userArgs;
   let employeeTransactions = transactionRecords[empId] || { empId, orders: [] };
-  return { transactionRecords, cmdSpecificData: employeeTransactions };
+  return employeeTransactions;
 };
 
-const performTransaction = function(path, readerFunc, existanceCheker, userArgs, dateFunc) {
-  const transactionActions = { "--save": makeTransactionEntry, "--query": performQuery };
+const performTransaction = function(
+  path,
+  readerFunc,
+  existanceCheker,
+  writeFunc,
+  userArgs,
+  dateFunc
+) {
   const transactionRecords = utils.getRecords(path, readerFunc, existanceCheker);
-  let [command, , beverage, , empId, , qty] = userArgs;
-  qty = +qty;
+  const { command, beverage, empId, qty } = handleInsput.parse(userArgs);
   const userOptions = { beverage, empId, qty };
-  const actionResponse = transactionActions[command](transactionRecords, userOptions, dateFunc);
   if (command == "--save") {
-    utils.updateRecords(path, actionResponse.transactionRecords);
+    const saveResponse = saveTransaction(transactionRecords, userOptions, dateFunc);
+    utils.updateRecords(path, saveResponse.transactionRecords, writeFunc);
+    return utils.getSaveMsg(saveResponse.insertedRecord);
   }
-  const messageGenerators = { "--save": utils.getSaveMsg, "--query": utils.getQueryMsg };
-  return messageGenerators[command](actionResponse.cmdSpecificData);
+  const matchedRecords = performQuery(transactionRecords, userOptions);
+  return utils.getQueryMsg(matchedRecords);
 };
 
-exports.makeTransactionEntry = makeTransactionEntry;
+exports.saveTransaction = saveTransaction;
 exports.performTransaction = performTransaction;
 exports.performQuery = performQuery;

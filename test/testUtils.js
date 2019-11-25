@@ -6,10 +6,13 @@ describe("getRecords()", function() {
   it("should give empty obj if no file exists of the given path", function() {
     const actualValue = utils.getRecords(
       "./NoFile",
-      function() {
+      function(arg1, arg2) {
+        assert.strictEqual(arg1, "./NoFile");
+        assert.strictEqual(arg2, "utf8");
         return '{"key":"Value"}';
       },
-      function() {
+      function(arg) {
+        assert.strictEqual(arg, "./NoFile");
         return false;
       }
     );
@@ -20,7 +23,9 @@ describe("getRecords()", function() {
   it("should give content of the file with true flag if file exists", function() {
     const actualValue = utils.getRecords(
       "path",
-      function() {
+      function(path, encode) {
+        assert.strictEqual(path, "path");
+        assert.strictEqual(encode, "utf8");
         return '{"key": "value"}';
       },
       function() {
@@ -33,14 +38,12 @@ describe("getRecords()", function() {
 });
 
 describe("updateRecords()", function() {
-  it("should update the given valid json file with the given object", function() {
-    const path = "./test/fileToTestUpdateRecords.json";
-    fs.writeFileSync(path, { msg: "Hello" }, "utf8");
-    utils.updateRecords(path, { msg: "Hi" });
-    const actualValue = fs.readFileSync(path, "utf8");
-    const expectedValue = '{"msg":"Hi"}';
-    assert.deepStrictEqual(actualValue, expectedValue);
-    fs.unlinkSync(path);
+  it("should make JSON string version of the content and give it to write func", function() {
+    utils.updateRecords("path", { msg: "Hi" }, function(path, content, encode) {
+      assert.strictEqual(path, "path");
+      assert.deepStrictEqual(content, '{"msg":"Hi"}');
+      assert.strictEqual(encode, "utf8");
+    });
   });
 });
 
@@ -68,9 +71,9 @@ describe("getQueryMsg", function() {
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 
-  it("should give no data message if no record is provided", function() {
+  it("should give no data if no record is provided", function() {
     const actualValue = utils.getQueryMsg({ empId: "000", orders: [] });
-    const expectedValue = "No record for the employee";
+    const expectedValue = "Employee ID,Beverage,Quantity,Date\nTotal: 0 Juices";
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });

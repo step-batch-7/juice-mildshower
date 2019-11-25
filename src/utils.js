@@ -14,9 +14,9 @@ const getRecords = function(path, readerFunc, existanceChecker) {
   return JSON.parse(readerFunc(path, "utf8"));
 };
 
-const updateRecords = function(path, content) {
+const updateRecords = function(path, content, writeFunc) {
   const stringForm = JSON.stringify(content);
-  fs.writeFileSync(path, stringForm, "utf8");
+  writeFunc(path, stringForm, "utf8");
 };
 
 const addRecordDetails = function(str, record) {
@@ -29,9 +29,6 @@ const countQuantities = function(total, record) {
 };
 
 const getQueryMsg = function(transactions) {
-  if (transactions.orders.length == 0) {
-    return "No record for the employee";
-  }
   const recordsWithEmpId = transactions.orders.map(insertEmpId(transactions.empId));
   let message = "Employee ID,Beverage,Quantity,Date";
   message = recordsWithEmpId.reduce(addRecordDetails, message);

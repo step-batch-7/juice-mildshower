@@ -11,6 +11,7 @@ const main = function() {
     path,
     fs.readFileSync,
     fs.existsSync,
+    fs.writeFileSync,
     userArgs,
     dateFunc
   );
