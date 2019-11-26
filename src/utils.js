@@ -1,15 +1,8 @@
 const fs = require("fs");
 
-const insertEmpId = function(empId) {
-  return function(record) {
-    const { beverage, qty, date } = record;
-    return { beverage, qty, date, empId };
-  };
-};
-
 const getLogs = function(path, readerFunc, existanceChecker) {
   if (!existanceChecker(path)) {
-    return {};
+    return [];
   }
   return JSON.parse(readerFunc(path, "utf8"));
 };
@@ -21,7 +14,7 @@ const updateLogs = function(path, content, writeFunc) {
 
 const addRecordDetails = function(str, record) {
   const { empId, beverage, qty, date } = record;
-  return str + "\n" + empId + "," + beverage + "," + qty + "," + date;
+  return str + `\n${empId},${beverage},${qty},${date}`;
 };
 
 const countQuantities = function(total, record) {
@@ -29,12 +22,9 @@ const countQuantities = function(total, record) {
 };
 
 const getQueryMsg = function(transactions) {
-  const recordsWithEmpId = transactions.orders.map(
-    insertEmpId(transactions.empId)
-  );
   let message = "Employee ID,Beverage,Quantity,Date";
-  message = recordsWithEmpId.reduce(addRecordDetails, message);
-  const totalCount = recordsWithEmpId.reduce(countQuantities, 0);
+  message = transactions.reduce(addRecordDetails, message);
+  const totalCount = transactions.reduce(countQuantities, 0);
   return message + "\nTotal: " + totalCount + " Juices";
 };
 
@@ -43,7 +33,13 @@ const getSaveMsg = function(record) {
   return addRecordDetails(message, record);
 };
 
-exports.insertEmpId = insertEmpId;
+const doesEmpIdMatch = function(empId) {
+  return function(record) {
+    return record.empId === empId;
+  };
+};
+
+exports.doesEmpIdMatch = doesEmpIdMatch;
 exports.getQueryMsg = getQueryMsg;
 exports.getSaveMsg = getSaveMsg;
 exports.getLogs = getLogs;

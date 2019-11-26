@@ -2,17 +2,13 @@ const utils = require("./utils.js");
 const handleInsput = require("./handleInput.js");
 
 const saveLog = function(transactionLogs, transactionDetail, dateFunc) {
-  const { empId, beverage, qty } = transactionDetail;
-  const date = dateFunc();
-  const record = { beverage, qty, date };
-  transactionLogs[empId] = transactionLogs[empId] || { empId, orders: [] };
-  transactionLogs[empId].orders.push(record);
-  return { transactionLogs, savedLog: { empId, beverage, qty, date } };
+  transactionDetail.date = dateFunc();
+  transactionLogs.push(transactionDetail);
+  return { transactionLogs, savedLog: transactionDetail };
 };
 
 const performQuery = function(transactionLogs, empId) {
-  let employeeTransactions = transactionLogs[empId] || { empId, orders: [] };
-  return employeeTransactions;
+  return transactionLogs.filter(utils.doesEmpIdMatch(empId));
 };
 
 const performAction = function(path, helperFuncs, userArgs) {
