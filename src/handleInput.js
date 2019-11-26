@@ -1,9 +1,10 @@
 const parse = function(userArgs) {
-  const command = userArgs[0];
-  const beverage = userArgs[userArgs.indexOf("--beverage") + 1];
-  const qty = +userArgs[userArgs.indexOf("--qty") + 1];
-  const empId = userArgs[userArgs.indexOf("--empId") + 1];
-  return { command, beverage, qty, empId };
+  const parsed = { command: userArgs[0] };
+  for (let index = 1; index < userArgs.length; index += 2) {
+    parsed[userArgs[index].slice(2)] = userArgs[index + 1];
+  }
+  parsed.qty = +parsed.qty;
+  return parsed;
 };
 
 exports.parse = parse;
