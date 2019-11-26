@@ -1,41 +1,36 @@
 const utils = require("./utils.js");
 const handleInsput = require("./handleInput.js");
 
-const saveTransaction = function(transactionRecords, transactionDetail, dateFunc) {
+const saveLog = function(transactionLogs, transactionDetail, dateFunc) {
   const { empId, beverage, qty } = transactionDetail;
   const date = dateFunc();
   const record = { beverage, qty, date };
-  transactionRecords[empId] = transactionRecords[empId] || { empId, orders: [] };
-  transactionRecords[empId].orders.push(record);
-  return { transactionRecords, insertedRecord: { empId, beverage, qty, date } };
+  transactionLogs[empId] = transactionLogs[empId] || { empId, orders: [] };
+  transactionLogs[empId].orders.push(record);
+  return { transactionLogs, savedLog: { empId, beverage, qty, date } };
 };
 
-const performQuery = function(transactionRecords, userArgs) {
-  const { empId } = userArgs;
-  let employeeTransactions = transactionRecords[empId] || { empId, orders: [] };
+const performQuery = function(transactionLogs, empId) {
+  let employeeTransactions = transactionLogs[empId] || { empId, orders: [] };
   return employeeTransactions;
 };
 
-const performTransaction = function(
-  path,
-  readerFunc,
-  existanceCheker,
-  writeFunc,
-  userArgs,
-  dateFunc
-) {
-  const transactionRecords = utils.getRecords(path, readerFunc, existanceCheker);
+const performAction = function(path, helperFuncs, userArgs) {
+  const { reader, writer, doesExist, dateFunc } = helperFuncs;
+  const transactionLogs = utils.getLogs(path, reader, doesExist);
   const { command, beverage, empId, qty } = handleInsput.parse(userArgs);
-  const userOptions = { beverage, empId, qty };
+
   if (command == "--save") {
-    const saveResponse = saveTransaction(transactionRecords, userOptions, dateFunc);
-    utils.updateRecords(path, saveResponse.transactionRecords, writeFunc);
-    return utils.getSaveMsg(saveResponse.insertedRecord);
+    const userOptions = { beverage, empId, qty };
+    const saveResponse = saveLog(transactionLogs, userOptions, dateFunc);
+    utils.updateLogs(path, saveResponse.transactionLogs, writer);
+    return utils.getSaveMsg(saveResponse.savedLog);
   }
-  const matchedRecords = performQuery(transactionRecords, userOptions);
+
+  const matchedRecords = performQuery(transactionLogs, empId);
   return utils.getQueryMsg(matchedRecords);
 };
 
-exports.saveTransaction = saveTransaction;
-exports.performTransaction = performTransaction;
+exports.saveLog = saveLog;
+exports.performAction = performAction;
 exports.performQuery = performQuery;

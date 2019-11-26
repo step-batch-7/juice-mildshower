@@ -2,9 +2,9 @@ const utils = require("../src/utils");
 const assert = require("assert");
 const fs = require("fs");
 
-describe("getRecords()", function() {
+describe("getRecords", function() {
   it("should give empty obj if no file exists of the given path", function() {
-    const actualValue = utils.getRecords(
+    const actualValue = utils.getLogs(
       "./NoFile",
       function(arg1, arg2) {
         assert.strictEqual(arg1, "./NoFile");
@@ -21,7 +21,7 @@ describe("getRecords()", function() {
   });
 
   it("should give content of the file with true flag if file exists", function() {
-    const actualValue = utils.getRecords(
+    const actualValue = utils.getLogs(
       "path",
       function(path, encode) {
         assert.strictEqual(path, "path");
@@ -37,22 +37,31 @@ describe("getRecords()", function() {
   });
 });
 
-describe("updateRecords()", function() {
+describe("updateRecords", function() {
   it("should make JSON string version of the content and give it to write func", function() {
-    utils.updateRecords("path", { msg: "Hi" }, function(path, content, encode) {
+    let callTimes = 0;
+    utils.updateLogs("path", { msg: "Hi" }, function(path, content, encode) {
       assert.strictEqual(path, "path");
       assert.deepStrictEqual(content, '{"msg":"Hi"}');
       assert.strictEqual(encode, "utf8");
+      callTimes++;
     });
+    assert.strictEqual(callTimes, 1);
   });
 });
 
-describe("getSaveMsg()", function() {
+describe("getSaveMsg", function() {
   it("should give message saying details is recorded", function() {
     const date = "2019-11-24T08:40:49.347Z";
-    const actualValue = utils.getSaveMsg({ empId: "1111", beverage: "Orange", qty: 2, date: date });
+    const actualValue = utils.getSaveMsg({
+      empId: "1111",
+      beverage: "Orange",
+      qty: 2,
+      date: date
+    });
     const expectedValue =
-      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n1111,Orange,2," + date;
+      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n1111,Orange,2," +
+      date;
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
@@ -80,7 +89,11 @@ describe("getQueryMsg", function() {
 
 describe("insertEmpId", function() {
   it("should give a function that inserts the given empId to a record", function() {
-    const actualValue = utils.insertEmpId("1111")({ beverage: "b", qty: 1, date: "d" });
+    const actualValue = utils.insertEmpId("1111")({
+      beverage: "b",
+      qty: 1,
+      date: "d"
+    });
     const expectedValue = { beverage: "b", qty: 1, date: "d", empId: "1111" };
     assert.deepStrictEqual(actualValue, expectedValue);
   });

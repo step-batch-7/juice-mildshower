@@ -7,7 +7,7 @@
     "start": "node beverage.js",
     "test": "nyc mocha"
   },
-  "author": "",
+  "author": "Sudipta Kundu",
   "license": "ISC",
   "devDependencies": {
     "mocha": "^6.2.2",

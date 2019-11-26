@@ -7,14 +7,14 @@ const insertEmpId = function(empId) {
   };
 };
 
-const getRecords = function(path, readerFunc, existanceChecker) {
+const getLogs = function(path, readerFunc, existanceChecker) {
   if (!existanceChecker(path)) {
     return {};
   }
   return JSON.parse(readerFunc(path, "utf8"));
 };
 
-const updateRecords = function(path, content, writeFunc) {
+const updateLogs = function(path, content, writeFunc) {
   const stringForm = JSON.stringify(content);
   writeFunc(path, stringForm, "utf8");
 };
@@ -29,7 +29,9 @@ const countQuantities = function(total, record) {
 };
 
 const getQueryMsg = function(transactions) {
-  const recordsWithEmpId = transactions.orders.map(insertEmpId(transactions.empId));
+  const recordsWithEmpId = transactions.orders.map(
+    insertEmpId(transactions.empId)
+  );
   let message = "Employee ID,Beverage,Quantity,Date";
   message = recordsWithEmpId.reduce(addRecordDetails, message);
   const totalCount = recordsWithEmpId.reduce(countQuantities, 0);
@@ -44,7 +46,7 @@ const getSaveMsg = function(record) {
 exports.insertEmpId = insertEmpId;
 exports.getQueryMsg = getQueryMsg;
 exports.getSaveMsg = getSaveMsg;
-exports.getRecords = getRecords;
-exports.updateRecords = updateRecords;
+exports.getLogs = getLogs;
+exports.updateLogs = updateLogs;
 exports.addRecordDetails = addRecordDetails;
 exports.countQuantities = countQuantities;
