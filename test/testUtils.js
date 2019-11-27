@@ -115,6 +115,24 @@ describe("countQuantities", function() {
   });
 });
 
+describe("doesDateMatch", function() {
+  it("should give a func that should give true if date of given record matches with the given date", function() {
+    const actualValue = utils.doesDateMatch("2019-11-23")({
+      date: "2019-11-23T20:19:53.166Z"
+    });
+    const expectedValue = true;
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give a func that should give false if date of given record does not match with the given date", function() {
+    const actualValue = utils.doesDateMatch("2019-11-23")({
+      date: "2019-11-20T20:19:53.166Z"
+    });
+    const expectedValue = false;
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+});
+
 describe("doesEmpIdMatch", function() {
   it("should give a func that should give true if empId of given record matches with the given empId", function() {
     const actualValue = utils.doesEmpIdMatch("888")({ empId: "888" });

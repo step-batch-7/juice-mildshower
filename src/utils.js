@@ -39,7 +39,14 @@ const doesEmpIdMatch = function(empId) {
   };
 };
 
+const doesDateMatch = function(date) {
+  return function(record) {
+    return record.date.slice(0, 10) === date;
+  };
+};
+
 exports.doesEmpIdMatch = doesEmpIdMatch;
+exports.doesDateMatch = doesDateMatch;
 exports.getQueryMsg = getQueryMsg;
 exports.getSaveMsg = getSaveMsg;
 exports.getLogs = getLogs;
