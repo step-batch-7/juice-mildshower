@@ -2,7 +2,7 @@ const utils = require("../src/utils");
 const assert = require("assert");
 const fs = require("fs");
 
-describe("getLogs", function() {
+describe("#getLogs()", function() {
   it("should give empty obj if no file exists of the given path", function() {
     const actualValue = utils.getLogs(
       "./NoFile",
@@ -37,7 +37,7 @@ describe("getLogs", function() {
   });
 });
 
-describe("updateRecords", function() {
+describe("updateRecords()", function() {
   it("should make JSON string version of the content and give it to write func", function() {
     let callTimes = 0;
     utils.updateLogs("path", [{ msg: "Hi" }], function(path, content, encode) {
@@ -50,7 +50,7 @@ describe("updateRecords", function() {
   });
 });
 
-describe("getSaveMsg", function() {
+describe("#getSaveMsg()", function() {
   it("should give message saying details is recorded", function() {
     const date = "2019-11-24T08:40:49.347Z";
     const actualValue = utils.getSaveMsg({
@@ -66,7 +66,7 @@ describe("getSaveMsg", function() {
   });
 });
 
-describe("getQueryMsg", function() {
+describe("#getQueryMsg()", function() {
   it("should give all given records in a string format with total quantity count", function() {
     const actualValue = utils.getQueryMsg([
       {
@@ -94,7 +94,7 @@ describe("getQueryMsg", function() {
   });
 });
 
-describe("addRecordDetails", function() {
+describe("#addRecordDetails()", function() {
   it("should add details of the given recors to the given str", function() {
     const actualValue = utils.addRecordDetails("hi: ", {
       beverage: "b",
@@ -107,7 +107,7 @@ describe("addRecordDetails", function() {
   });
 });
 
-describe("countQuantities", function() {
+describe("#countQuantities()", function() {
   it("should add the quantity to given number", function() {
     const actualValue = utils.countQuantities(5, { qty: 3 });
     const expectedValue = 8;
@@ -115,7 +115,7 @@ describe("countQuantities", function() {
   });
 });
 
-describe("doesDateMatch", function() {
+describe("#doesDateMatch()", function() {
   it("should give a func that should give true if date of given record matches with the given date", function() {
     const actualValue = utils.doesDateMatch("2019-11-23")({
       date: "2019-11-23T20:19:53.166Z"
@@ -133,7 +133,7 @@ describe("doesDateMatch", function() {
   });
 });
 
-describe("doesEmpIdMatch", function() {
+describe("#doesEmpIdMatch()", function() {
   it("should give a func that should give true if empId of given record matches with the given empId", function() {
     const actualValue = utils.doesEmpIdMatch("888")({ empId: "888" });
     const expectedValue = true;

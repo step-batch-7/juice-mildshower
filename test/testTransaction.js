@@ -1,7 +1,7 @@
 const transaction = require("../src/transaction");
 const assert = require("assert");
 
-describe("saveLog", function() {
+describe("#saveLog()", function() {
   it("should make entry for new transaction to the empty records and give records back", function() {
     const date = new Date().toJSON();
     const dateFunc = function() {
@@ -20,7 +20,7 @@ describe("saveLog", function() {
   });
 });
 
-describe("performQuery", function() {
+describe("#performQuery()", function() {
   it("should give matched records if only empId is given", function() {
     const actualValue = transaction.performQuery(
       [
@@ -143,7 +143,7 @@ describe("performQuery", function() {
   });
 });
 
-describe("empQuery", function() {
+describe("#empQuery()", function() {
   it("should give all records for given employ Id", function() {
     const actualValue = transaction.empQuery(
       [
@@ -202,7 +202,7 @@ describe("empQuery", function() {
   });
 });
 
-describe("dateQuery", function() {
+describe("#dateQuery()", function() {
   it("should give records of the given date", function() {
     const actualValue = transaction.dateQuery(
       [
@@ -249,7 +249,7 @@ describe("dateQuery", function() {
   });
 });
 
-describe("performAction", function() {
+describe("#performAction()", function() {
   it("should save a transaction if save command is given", function() {
     let callTimes = 0;
     const userArgs = [
@@ -315,6 +315,29 @@ describe("performAction", function() {
     );
     const expectedValue =
       "Employee ID,Beverage,Quantity,Date\n2,Or,4,2019-11-26T06:30:26.943Z\nTotal: 4 Juices";
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give wrong input message if wrong set of inputs is given", function() {
+    const userArgs = ["--query", "--qty", "2"];
+    const helperFuncs = {
+      reader: (path, encode) => {
+        assert.strictEqual(path, "path");
+        assert.strictEqual(encode, "utf8");
+        return "[]";
+      },
+      doesExist: path => {
+        assert.strictEqual(path, "path");
+        return true;
+      }
+    };
+
+    const actualValue = transaction.performAction(
+      "path",
+      helperFuncs,
+      userArgs
+    );
+    const expectedValue = "Please give a valid set of input.";
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
