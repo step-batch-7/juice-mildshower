@@ -24,7 +24,7 @@
 > - empId or date or combination of both is mandetory for query
 
 - Options can be given in any order
-- Command (--save/--query) must be given in firt field
+- Command (--save/--query) must be given in first field
 - If any option is repeated with valid choice then the last choice will be taken for that option
 - If any option is given that is not needed for the command then that will be ignored. However the choice of the option must be valid to make the command work.
 
