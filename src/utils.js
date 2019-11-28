@@ -30,8 +30,9 @@ const countQuantities = function(total, record) {
 const getQueryMsg = function(transactions) {
   let message = "Employee ID,Beverage,Quantity,Date";
   message = transactions.reduce(addRecordDetails, message);
-  const totalCount = transactions.reduce(countQuantities, 0);
-  return message + "\nTotal: " + totalCount + " Juices";
+  const total = transactions.reduce(countQuantities, 0);
+  const suffix = (total > 1 && "Juices") || "Juice";
+  return `${message}\nTotal: ${total} ${suffix}`;
 };
 
 const getSaveMsg = function(record) {

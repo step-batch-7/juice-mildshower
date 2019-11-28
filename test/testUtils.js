@@ -96,7 +96,7 @@ describe("#getQueryMsg()", function() {
 
   it("should give no data if no record is provided", function() {
     const actualValue = utils.getQueryMsg([]);
-    const expectedValue = "Employee ID,Beverage,Quantity,Date\nTotal: 0 Juices";
+    const expectedValue = "Employee ID,Beverage,Quantity,Date\nTotal: 0 Juice";
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });

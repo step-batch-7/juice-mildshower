@@ -52,6 +52,57 @@ describe("#parse()", function() {
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 
+  it("should give object with proper aguements if empId and date are given for query", function() {
+    const actualValue = handleInput.parse([
+      "--query",
+      "--empId",
+      "12",
+      "--date",
+      "2019-02-18"
+    ]);
+    const expectedValue = {
+      command: "--query",
+      date: "2019-02-18",
+      empId: 12,
+      validation: true
+    };
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give object with proper aguements if beverage and date are given for query", function() {
+    const actualValue = handleInput.parse([
+      "--query",
+      "--beverage",
+      "Orange",
+      "--date",
+      "2019-02-18"
+    ]);
+    const expectedValue = {
+      command: "--query",
+      date: "2019-02-18",
+      beverage: "Orange",
+      validation: true
+    };
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give object with proper aguements if beverage and empId are given for query", function() {
+    const actualValue = handleInput.parse([
+      "--query",
+      "--beverage",
+      "Orange",
+      "--empId",
+      "12"
+    ]);
+    const expectedValue = {
+      command: "--query",
+      empId: 12,
+      beverage: "Orange",
+      validation: true
+    };
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
   it("should give object with proper aguements if all three options are given for query", function() {
     const actualValue = handleInput.parse([
       "--query",

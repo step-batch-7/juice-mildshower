@@ -1,1 +1,1 @@
-[{"beverage":"Orange","empId":1,"qty":1234,"date":"2019-11-28T07:30:08.954Z"},{"beverage":"Banana","empId":123,"qty":1,"date":"2019-11-28T07:30:26.569Z"}]
+[{"beverage":"Orange","empId":1,"qty":1234,"date":"2019-11-28T07:30:08.954Z"},{"beverage":"Banana","empId":123,"qty":1,"date":"2019-11-28T07:30:26.569Z"},{"beverage":"\n","empId":123,"qty":1,"date":"2019-11-28T07:34:08.557Z"}]
