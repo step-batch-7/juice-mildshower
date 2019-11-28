@@ -20,7 +20,8 @@ const isValidComb = function(parsedVals) {
   const cmd = parsedVals.command;
   const isValidCmd = ["--save", "--query"].includes(cmd);
   const isVldSave = cmd == "--save" && isEmpGiven && isBvrgGiven && isQtyGiven;
-  const isVldQuery = cmd == "--query" && (isDateGiven || isEmpGiven);
+  const areQueryOptsEnough = isDateGiven || isEmpGiven || isBvrgGiven;
+  const isVldQuery = cmd == "--query" && areQueryOptsEnough;
   return isValidCmd && (isVldQuery || isVldSave);
 };
 

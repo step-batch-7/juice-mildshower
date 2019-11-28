@@ -8,18 +8,23 @@ const saveLog = function(transactionLogs, transactionDetail, dateFunc) {
 };
 
 const empQuery = function(transactionLogs, empId) {
-  return transactionLogs.filter(utils.doesEmpIdMatch(empId));
+  return transactionLogs.filter(utils.doesKeyValMatch("empId", empId));
 };
 
 const dateQuery = function(transactionLogs, date) {
   return transactionLogs.filter(utils.doesDateMatch(date));
 };
 
+const bvrgQuery = function(transactionLogs, bvrg) {
+  return transactionLogs.filter(utils.doesKeyValMatch("beverage", bvrg));
+};
+
 const performQuery = function(transactionLogs, userOptions) {
-  const { date, empId } = userOptions;
+  const { date, empId, beverage } = userOptions;
   matchedLogs = transactionLogs.slice();
   matchedLogs = (empId && empQuery(matchedLogs, empId)) || matchedLogs;
   matchedLogs = (date && dateQuery(matchedLogs, date)) || matchedLogs;
+  matchedLogs = (beverage && bvrgQuery(matchedLogs, beverage)) || matchedLogs;
   return matchedLogs;
 };
 
@@ -41,7 +46,7 @@ const performAction = function(path, helperFuncs, userArgs) {
     return utils.getSaveMsg(saveResponse.savedLog);
   }
 
-  const userOptions = { empId, date };
+  const userOptions = { empId, date, beverage };
   const matchedRecords = performQuery(transactionLogs, userOptions);
   return utils.getQueryMsg(matchedRecords);
 };

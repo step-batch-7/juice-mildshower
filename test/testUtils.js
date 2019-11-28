@@ -1,6 +1,5 @@
 const utils = require("../src/utils");
 const assert = require("assert");
-const fs = require("fs");
 
 describe("#getLogs()", function() {
   it("should give empty obj if no file exists of the given path", function() {
@@ -133,15 +132,15 @@ describe("#doesDateMatch()", function() {
   });
 });
 
-describe("#doesEmpIdMatch()", function() {
+describe("#doesKeyValMatch()", function() {
   it("should give a func that should give true if empId of given record matches with the given empId", function() {
-    const actualValue = utils.doesEmpIdMatch("888")({ empId: "888" });
+    const actualValue = utils.doesKeyValMatch("empId", "888")({ empId: "888" });
     const expectedValue = true;
     assert.strictEqual(actualValue, expectedValue);
   });
 
   it("should give a func that should give false if empId of given record does not match with the given empId", function() {
-    const actualValue = utils.doesEmpIdMatch("888")({ empId: "123" });
+    const actualValue = utils.doesKeyValMatch("empId", "888")({ empId: "123" });
     const expectedValue = false;
     assert.strictEqual(actualValue, expectedValue);
   });

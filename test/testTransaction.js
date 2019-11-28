@@ -62,7 +62,7 @@ describe("#performQuery()", function() {
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 
-  it("should give matched records if only empId is given", function() {
+  it("should give matched records if only beverage is given", function() {
     const actualValue = transaction.performQuery(
       [
         {
@@ -84,13 +84,19 @@ describe("#performQuery()", function() {
           date: "2019-11-23T20:19:53.166Z"
         }
       ],
-      { empId: "111", date: "2019-11-23" }
+      { beverage: "banana" }
     );
     const expectedValue = [
       {
-        beverage: "Orng",
+        beverage: "banana",
         empId: "111",
-        qty: 2,
+        qty: 4,
+        date: "2019-11-20T20:19:53.166Z"
+      },
+      {
+        beverage: "banana",
+        empId: "13",
+        qty: 4,
         date: "2019-11-23T20:19:53.166Z"
       }
     ];
@@ -126,7 +132,42 @@ describe("#performQuery()", function() {
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 
-  it("should give empty array if no record for the query is present", function() {
+  it("should give matched records if empId, beverage and date are given", function() {
+    const actualValue = transaction.performQuery(
+      [
+        {
+          beverage: "Orng",
+          empId: "111",
+          qty: 2,
+          date: "2019-11-23T20:19:53.166Z"
+        },
+        {
+          beverage: "banana",
+          empId: "111",
+          qty: 4,
+          date: "2019-11-23T20:19:53.166Z"
+        },
+        {
+          beverage: "banana",
+          empId: "13",
+          qty: 4,
+          date: "2019-11-20T20:19:53.166Z"
+        }
+      ],
+      { empId: "111", date: "2019-11-23", beverage: "Orng" }
+    );
+    const expectedValue = [
+      {
+        beverage: "Orng",
+        empId: "111",
+        qty: 2,
+        date: "2019-11-23T20:19:53.166Z"
+      }
+    ];
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give empty array if no record present for the query", function() {
     const actualValue = transaction.performQuery(
       [
         {

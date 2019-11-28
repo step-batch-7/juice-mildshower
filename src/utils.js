@@ -33,9 +33,9 @@ const getSaveMsg = function(record) {
   return addRecordDetails(message, record);
 };
 
-const doesEmpIdMatch = function(empId) {
+const doesKeyValMatch = function(key, val) {
   return function(record) {
-    return record.empId === empId;
+    return record[key] === val;
   };
 };
 
@@ -45,7 +45,7 @@ const doesDateMatch = function(date) {
   };
 };
 
-exports.doesEmpIdMatch = doesEmpIdMatch;
+exports.doesKeyValMatch = doesKeyValMatch;
 exports.doesDateMatch = doesDateMatch;
 exports.getQueryMsg = getQueryMsg;
 exports.getSaveMsg = getSaveMsg;
