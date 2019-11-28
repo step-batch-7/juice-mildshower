@@ -1,5 +1,5 @@
 const handleInput = require("../src/handleInput.js");
-const assert = require("assert");
+const assert = require("chai").assert;
 
 describe("#parse()", function() {
   it("should give object with proper aguements if correct save format is given", function() {
@@ -134,7 +134,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if beverage is not given with -save", function() {
@@ -148,7 +148,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if qty is not given with -save", function() {
@@ -162,7 +162,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if enough options are not given with -query", function() {
@@ -170,7 +170,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if wrong command is given", function() {
@@ -178,7 +178,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if command is given in between other options", function() {
@@ -192,7 +192,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if beverage choice is empty Str", function() {
@@ -208,7 +208,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if qty choice is wrong", function() {
@@ -224,7 +224,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if empId choice is wrong", function() {
@@ -240,7 +240,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if date format is wrong", function() {
@@ -248,7 +248,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 
   it("should give validation false if date bound is wrong", function() {
@@ -256,7 +256,7 @@ describe("#parse()", function() {
     const expectedValue = {
       validation: false
     };
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.include(actualValue, expectedValue);
   });
 });
 

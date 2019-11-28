@@ -26,7 +26,7 @@ const isValidComb = function(parsedVals) {
 };
 
 const parse = function(userArgs) {
-  const parsed = { command: userArgs[0], validation: true };
+  const parsed = { command: userArgs[0] };
   const validOpts = ["--beverage", "--empId", "--qty", "--date"];
   const pairValidFunc = {
     "--beverage": isValidBvrg,
@@ -46,9 +46,7 @@ const parse = function(userArgs) {
 
   parsed.qty && (parsed.qty = +parsed.qty);
   parsed.empId && (parsed.empId = +parsed.empId);
-  if (!isValidComb(parsed)) {
-    return { validation: false };
-  }
+  parsed.validation = isValidComb(parsed);
   return parsed;
 };
 

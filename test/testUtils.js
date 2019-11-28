@@ -1,5 +1,5 @@
 const utils = require("../src/utils");
-const assert = require("assert");
+const assert = require("chai").assert;
 
 describe("#getLogs()", function() {
   it("should give empty obj if no file exists of the given path", function() {
@@ -128,30 +128,26 @@ describe("#doesDateMatch()", function() {
     const actualValue = utils.doesDateMatch("2019-11-23")({
       date: new Date("2019-11-23T20:19:53.166Z")
     });
-    const expectedValue = true;
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.ok(actualValue);
   });
 
   it("should give a func that should give false if date of given record does not match with the given date", function() {
     const actualValue = utils.doesDateMatch("2019-11-23")({
       date: new Date("2019-11-20T20:19:53.166Z")
     });
-    const expectedValue = false;
-    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.ok(!actualValue);
   });
 });
 
 describe("#doesKeyValMatch()", function() {
   it("should give a func that should give true if empId of given record matches with the given empId", function() {
     const actualValue = utils.doesKeyValMatch("empId", 888)({ empId: 888 });
-    const expectedValue = true;
-    assert.strictEqual(actualValue, expectedValue);
+    assert.ok(actualValue);
   });
 
   it("should give a func that should give false if empId of given record does not match with the given empId", function() {
     const actualValue = utils.doesKeyValMatch("empId", 888)({ empId: 123 });
-    const expectedValue = false;
-    assert.strictEqual(actualValue, expectedValue);
+    assert.ok(!actualValue);
   });
 });
 
