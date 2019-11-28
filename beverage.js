@@ -8,7 +8,7 @@ const main = function() {
     reader: fs.readFileSync,
     writer: fs.writeFileSync,
     doesExist: fs.existsSync,
-    dateFunc: () => new Date().toJSON()
+    dateFunc: () => new Date()
   };
   const message = transaction.performAction(path, helperFuncs, userArgs);
   console.log(message);

@@ -25,13 +25,21 @@ describe("#getLogs()", function() {
       function(path, encode) {
         assert.strictEqual(path, "path");
         assert.strictEqual(encode, "utf8");
-        return '[{"key": "value"}]';
+        return '[{"empId":123,"beverage":"Orng","qty":2,"date":"2019-11-28T05:48:15.058Z"}]';
       },
-      function() {
+      function(path) {
+        assert.strictEqual(path, "path");
         return true;
       }
     );
-    const expectedValue = [{ key: "value" }];
+    const expectedValue = [
+      {
+        empId: 123,
+        beverage: "Orng",
+        qty: 2,
+        date: new Date("2019-11-28T05:48:15.058Z")
+      }
+    ];
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
@@ -50,35 +58,35 @@ describe("updateRecords()", function() {
 });
 
 describe("#getSaveMsg()", function() {
-  it("should give message saying details is recorded", function() {
-    const date = "2019-11-24T08:40:49.347Z";
+  it("should give message saying details are recorded", function() {
+    const date = new Date("2019-11-24T08:40:49.347Z");
     const actualValue = utils.getSaveMsg({
-      empId: "1111",
+      empId: 1111,
       beverage: "Orange",
       qty: 2,
       date
     });
     const expectedValue =
-      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n1111,Orange,2," +
-      date;
+      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n1111,Orange,2,2019-11-24T08:40:49.347Z";
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
 
 describe("#getQueryMsg()", function() {
   it("should give all given records in a string format with total quantity count", function() {
+    const date = new Date("2019-11-23T20:19:53.166Z");
     const actualValue = utils.getQueryMsg([
       {
         beverage: "Orng",
         qty: 2,
-        empId: "111",
-        date: "2019-11-23T20:19:53.166Z"
+        empId: 111,
+        date
       },
       {
         beverage: "banana",
         qty: 4,
-        empId: "111",
-        date: "2019-11-23T20:19:53.166Z"
+        empId: 111,
+        date
       }
     ]);
     const expectedValue =
@@ -95,13 +103,14 @@ describe("#getQueryMsg()", function() {
 
 describe("#addRecordDetails()", function() {
   it("should add details of the given recors to the given str", function() {
+    const date = new Date();
     const actualValue = utils.addRecordDetails("hi: ", {
       beverage: "b",
       qty: 1,
-      date: "d",
-      empId: "1111"
+      date,
+      empId: 1111
     });
-    const expectedValue = "hi: \n1111,b,1,d";
+    const expectedValue = "hi: \n1111,b,1," + date.toJSON();
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
@@ -117,7 +126,7 @@ describe("#countQuantities()", function() {
 describe("#doesDateMatch()", function() {
   it("should give a func that should give true if date of given record matches with the given date", function() {
     const actualValue = utils.doesDateMatch("2019-11-23")({
-      date: "2019-11-23T20:19:53.166Z"
+      date: new Date("2019-11-23T20:19:53.166Z")
     });
     const expectedValue = true;
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -125,7 +134,7 @@ describe("#doesDateMatch()", function() {
 
   it("should give a func that should give false if date of given record does not match with the given date", function() {
     const actualValue = utils.doesDateMatch("2019-11-23")({
-      date: "2019-11-20T20:19:53.166Z"
+      date: new Date("2019-11-20T20:19:53.166Z")
     });
     const expectedValue = false;
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -134,14 +143,32 @@ describe("#doesDateMatch()", function() {
 
 describe("#doesKeyValMatch()", function() {
   it("should give a func that should give true if empId of given record matches with the given empId", function() {
-    const actualValue = utils.doesKeyValMatch("empId", "888")({ empId: "888" });
+    const actualValue = utils.doesKeyValMatch("empId", 888)({ empId: 888 });
     const expectedValue = true;
     assert.strictEqual(actualValue, expectedValue);
   });
 
   it("should give a func that should give false if empId of given record does not match with the given empId", function() {
-    const actualValue = utils.doesKeyValMatch("empId", "888")({ empId: "123" });
+    const actualValue = utils.doesKeyValMatch("empId", 888)({ empId: 123 });
     const expectedValue = false;
     assert.strictEqual(actualValue, expectedValue);
+  });
+});
+
+describe("#convertDateStrToObj()", function() {
+  it("Should convert date string of a record object to date object and give that record back", function() {
+    const actualValue = utils.convertDateStrToObj({
+      empId: 12,
+      beverage: "Or",
+      qty: 1,
+      date: "2019-11-28T06:40:05.114Z"
+    });
+    const expectedValue = {
+      empId: 12,
+      beverage: "Or",
+      qty: 1,
+      date: new Date("2019-11-28T06:40:05.114Z")
+    };
+    assert.deepStrictEqual(actualValue, expectedValue);
   });
 });

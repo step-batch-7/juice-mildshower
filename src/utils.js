@@ -1,10 +1,16 @@
 const fs = require("fs");
 
+const convertDateStrToObj = function(record) {
+  record.date = new Date(record.date);
+  return record;
+};
+
 const getLogs = function(path, readerFunc, existanceChecker) {
-  if (!existanceChecker(path)) {
-    return [];
+  let logs = [];
+  if (existanceChecker(path)) {
+    logs = JSON.parse(readerFunc(path, "utf8"));
   }
-  return JSON.parse(readerFunc(path, "utf8"));
+  return logs.map(convertDateStrToObj);
 };
 
 const updateLogs = function(path, content, writeFunc) {
@@ -14,7 +20,7 @@ const updateLogs = function(path, content, writeFunc) {
 
 const addRecordDetails = function(str, record) {
   const { empId, beverage, qty, date } = record;
-  return str + `\n${empId},${beverage},${qty},${date}`;
+  return str + `\n${empId},${beverage},${qty},${date.toJSON()}`;
 };
 
 const countQuantities = function(total, record) {
@@ -41,7 +47,7 @@ const doesKeyValMatch = function(key, val) {
 
 const doesDateMatch = function(date) {
   return function(record) {
-    return record.date.slice(0, 10) === date;
+    return record.date.toJSON().slice(0, 10) === date;
   };
 };
 
@@ -53,3 +59,4 @@ exports.getLogs = getLogs;
 exports.updateLogs = updateLogs;
 exports.addRecordDetails = addRecordDetails;
 exports.countQuantities = countQuantities;
+exports.convertDateStrToObj = convertDateStrToObj;

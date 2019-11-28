@@ -56,3 +56,4 @@ exports.performAction = performAction;
 exports.performQuery = performQuery;
 exports.empQuery = empQuery;
 exports.dateQuery = dateQuery;
+exports.bvrgQuery = bvrgQuery;

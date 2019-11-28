@@ -45,6 +45,7 @@ const parse = function(userArgs) {
   }
 
   parsed.qty && (parsed.qty = +parsed.qty);
+  parsed.empId && (parsed.empId = +parsed.empId);
   if (!isValidComb(parsed)) {
     return { validation: false };
   }
@@ -52,3 +53,6 @@ const parse = function(userArgs) {
 };
 
 exports.parse = parse;
+exports.isValidBvrg = isValidBvrg;
+exports.isValidDate = isValidDate;
+exports.isPosInt = isPosInt;

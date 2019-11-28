@@ -16,7 +16,7 @@ describe("#parse()", function() {
       command: "--save",
       beverage: "Orange",
       qty: 4,
-      empId: "25343",
+      empId: 25343,
       validation: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -26,7 +26,7 @@ describe("#parse()", function() {
     const actualValue = handleInput.parse(["--query", "--empId", "1234"]);
     const expectedValue = {
       command: "--query",
-      empId: "1234",
+      empId: 1234,
       validation: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -66,7 +66,7 @@ describe("#parse()", function() {
       command: "--query",
       beverage: "Orange",
       date: "2019-02-01",
-      empId: "1234",
+      empId: 1234,
       validation: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -206,5 +206,56 @@ describe("#parse()", function() {
       validation: false
     };
     assert.deepStrictEqual(actualValue, expectedValue);
+  });
+});
+
+describe("#isValidBvrg()", function() {
+  it("should give true if given beverage choice is a string of length more than 0", function() {
+    const actualValue = handleInput.isValidBvrg("Orange");
+    assert.ok(actualValue);
+  });
+
+  it("should give false if given beverage choice is a empty string", function() {
+    const actualValue = handleInput.isValidBvrg("");
+    assert.ok(!actualValue);
+  });
+
+  it("should give false if given beverage choice is not a string", function() {
+    const actualValue = handleInput.isValidBvrg(5);
+    assert.ok(!actualValue);
+  });
+});
+
+describe("#isValidDate()", function() {
+  it("should give true if date format and bound is valid", function() {
+    const actualValue = handleInput.isValidDate("2019-11-28");
+    assert.ok(actualValue);
+  });
+
+  it("should give false if date format is valid but out of bound", function() {
+    const actualValue = handleInput.isValidDate("2019-34-28");
+    assert.ok(!actualValue);
+  });
+
+  it("should give false if date format is invalid", function() {
+    const actualValue = handleInput.isValidDate("2019/11/28");
+    assert.ok(!actualValue);
+  });
+});
+
+describe("#isPosInt()", function() {
+  it("should give true if a positive integer is given", function() {
+    const actualValue = handleInput.isPosInt("5");
+    assert.ok(actualValue);
+  });
+
+  it("should give false if 0 is given", function() {
+    const actualValue = handleInput.isPosInt("0");
+    assert.ok(!actualValue);
+  });
+
+  it("should give false if negative no is given", function() {
+    const actualValue = handleInput.isPosInt("-7");
+    assert.ok(!actualValue);
   });
 });

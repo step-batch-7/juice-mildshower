@@ -3,18 +3,38 @@ const assert = require("assert");
 
 describe("#saveLog()", function() {
   it("should make entry for new transaction to the empty records and give records back", function() {
-    const date = new Date().toJSON();
+    const date = new Date();
     const dateFunc = function() {
       return date;
     };
     const actualValue = transaction.saveLog(
       [],
-      { beverage: "Orange", qty: 2, empId: "1111" },
+      { beverage: "Orange", qty: 2, empId: 1111 },
       dateFunc
     );
     const expectedValue = {
-      transactionLogs: [{ empId: "1111", beverage: "Orange", qty: 2, date }],
-      savedLog: { beverage: "Orange", qty: 2, empId: "1111", date }
+      transactionLogs: [{ empId: 1111, beverage: "Orange", qty: 2, date }],
+      savedLog: { beverage: "Orange", qty: 2, empId: 1111, date }
+    };
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should make entry for new transaction to non empty logs and give records back", function() {
+    const date = new Date();
+    const dateFunc = function() {
+      return date;
+    };
+    const actualValue = transaction.saveLog(
+      [{ empId: 1111, beverage: "Orange", qty: 2, date }],
+      { beverage: "Banana", qty: 1, empId: 1234 },
+      dateFunc
+    );
+    const expectedValue = {
+      transactionLogs: [
+        { empId: 1111, beverage: "Orange", qty: 2, date },
+        { beverage: "Banana", qty: 1, empId: 1234, date }
+      ],
+      savedLog: { beverage: "Banana", qty: 1, empId: 1234, date }
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -26,37 +46,37 @@ describe("#performQuery()", function() {
       [
         {
           beverage: "Orng",
-          empId: "111",
+          empId: 111,
           qty: 2,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "13",
+          empId: 13,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         }
       ],
-      { empId: "111" }
+      { empId: 111 }
     );
     const expectedValue = [
       {
         beverage: "Orng",
-        empId: "111",
+        empId: 111,
         qty: 2,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
       },
       {
         beverage: "banana",
-        empId: "111",
+        empId: 111,
         qty: 4,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
       }
     ];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -67,21 +87,21 @@ describe("#performQuery()", function() {
       [
         {
           beverage: "Orng",
-          empId: "111",
+          empId: 111,
           qty: 2,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-20T20:19:53.166Z"
+          date: new Date("2019-11-20T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "13",
+          empId: 13,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         }
       ],
       { beverage: "banana" }
@@ -89,15 +109,15 @@ describe("#performQuery()", function() {
     const expectedValue = [
       {
         beverage: "banana",
-        empId: "111",
+        empId: 111,
         qty: 4,
-        date: "2019-11-20T20:19:53.166Z"
+        date: new Date("2019-11-20T20:19:53.166Z")
       },
       {
         beverage: "banana",
-        empId: "13",
+        empId: 13,
         qty: 4,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
       }
     ];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -108,15 +128,15 @@ describe("#performQuery()", function() {
       [
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-20T20:19:53.166Z"
+          date: new Date("2019-11-20T20:19:53.166Z")
         },
         {
           beverage: "Banana",
-          empId: "13",
+          empId: 13,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         }
       ],
       { date: "2019-11-23" }
@@ -124,9 +144,114 @@ describe("#performQuery()", function() {
     const expectedValue = [
       {
         beverage: "Banana",
-        empId: "13",
+        empId: 13,
         qty: 4,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
+      }
+    ];
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give matched records if date and empId are given", function() {
+    const actualValue = transaction.performQuery(
+      [
+        {
+          beverage: "banana",
+          empId: 111,
+          qty: 4,
+          date: new Date("2019-11-20T20:19:53.166Z")
+        },
+        {
+          beverage: "Banana",
+          empId: 111,
+          qty: 4,
+          date: new Date("2019-11-23T20:19:53.166Z")
+        },
+        {
+          beverage: "Banana",
+          empId: 13,
+          qty: 4,
+          date: new Date("2019-11-23T20:19:53.166Z")
+        }
+      ],
+      { date: "2019-11-23", empId: 111 }
+    );
+    const expectedValue = [
+      {
+        beverage: "Banana",
+        empId: 111,
+        qty: 4,
+        date: new Date("2019-11-23T20:19:53.166Z")
+      }
+    ];
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give matched records if beverage and empId are given", function() {
+    const actualValue = transaction.performQuery(
+      [
+        {
+          beverage: "Orange",
+          empId: 111,
+          qty: 4,
+          date: new Date("2019-11-20T20:19:53.166Z")
+        },
+        {
+          beverage: "Banana",
+          empId: 111,
+          qty: 4,
+          date: new Date("2019-11-23T20:19:53.166Z")
+        },
+        {
+          beverage: "Banana",
+          empId: 13,
+          qty: 4,
+          date: new Date("2019-11-23T20:19:53.166Z")
+        }
+      ],
+      { beverage: "Banana", empId: 111 }
+    );
+    const expectedValue = [
+      {
+        beverage: "Banana",
+        empId: 111,
+        qty: 4,
+        date: new Date("2019-11-23T20:19:53.166Z")
+      }
+    ];
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give matched records if beverage and date are given", function() {
+    const actualValue = transaction.performQuery(
+      [
+        {
+          beverage: "Banana",
+          empId: 111,
+          qty: 4,
+          date: new Date("2019-11-20T20:19:53.166Z")
+        },
+        {
+          beverage: "Banana",
+          empId: 111,
+          qty: 4,
+          date: new Date("2019-11-23T20:19:53.166Z")
+        },
+        {
+          beverage: "Orange",
+          empId: 13,
+          qty: 4,
+          date: new Date("2019-11-23T20:19:53.166Z")
+        }
+      ],
+      { beverage: "Banana", date: "2019-11-23" }
+    );
+    const expectedValue = [
+      {
+        beverage: "Banana",
+        empId: 111,
+        qty: 4,
+        date: new Date("2019-11-23T20:19:53.166Z")
       }
     ];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -137,31 +262,31 @@ describe("#performQuery()", function() {
       [
         {
           beverage: "Orng",
-          empId: "111",
+          empId: 111,
           qty: 2,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "13",
+          empId: 13,
           qty: 4,
-          date: "2019-11-20T20:19:53.166Z"
+          date: new Date("2019-11-20T20:19:53.166Z")
         }
       ],
-      { empId: "111", date: "2019-11-23", beverage: "Orng" }
+      { empId: 111, date: "2019-11-23", beverage: "Orng" }
     );
     const expectedValue = [
       {
         beverage: "Orng",
-        empId: "111",
+        empId: 111,
         qty: 2,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
       }
     ];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -172,12 +297,12 @@ describe("#performQuery()", function() {
       [
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         }
       ],
-      { empId: "11", date: "2012-12-04" }
+      { empId: 11, date: "2012-12-04" }
     );
     const expectedValue = [];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -190,37 +315,37 @@ describe("#empQuery()", function() {
       [
         {
           beverage: "Orng",
-          empId: "111",
+          empId: 111,
           qty: 2,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "13",
+          empId: 13,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         }
       ],
-      "111"
+      111
     );
     const expectedValue = [
       {
         beverage: "Orng",
-        empId: "111",
+        empId: 111,
         qty: 2,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
       },
       {
         beverage: "banana",
-        empId: "111",
+        empId: 111,
         qty: 4,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
       }
     ];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -231,12 +356,12 @@ describe("#empQuery()", function() {
       [
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         }
       ],
-      "11"
+      11
     );
     const expectedValue = [];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -249,15 +374,15 @@ describe("#dateQuery()", function() {
       [
         {
           beverage: "Orng",
-          empId: "111",
+          empId: 111,
           qty: 2,
-          date: "2019-11-24T20:19:53.166Z"
+          date: new Date("2019-11-24T20:19:53.166Z")
         },
         {
           beverage: "banana",
-          empId: "111",
+          empId: 111,
           qty: 4,
-          date: "2019-11-23T20:19:53.166Z"
+          date: new Date("2019-11-23T20:19:53.166Z")
         }
       ],
       "2019-11-23"
@@ -265,9 +390,9 @@ describe("#dateQuery()", function() {
     const expectedValue = [
       {
         beverage: "banana",
-        empId: "111",
+        empId: 111,
         qty: 4,
-        date: "2019-11-23T20:19:53.166Z"
+        date: new Date("2019-11-23T20:19:53.166Z")
       }
     ];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -278,12 +403,59 @@ describe("#dateQuery()", function() {
       [
         {
           beverage: "Orng",
-          empId: "111",
+          empId: 111,
           qty: 2,
-          date: "2019-11-24T20:19:53.166Z"
+          date: new Date("2019-11-24T20:19:53.166Z")
         }
       ],
       "2019-11-23"
+    );
+    const expectedValue = [];
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+});
+
+describe("#bvrgQuery()", function() {
+  it("should give records of the given beverage", function() {
+    const actualValue = transaction.bvrgQuery(
+      [
+        {
+          beverage: "Orng",
+          empId: 111,
+          qty: 2,
+          date: new Date("2019-11-24T20:19:53.166Z")
+        },
+        {
+          beverage: "banana",
+          empId: 111,
+          qty: 4,
+          date: new Date("2019-11-23T20:19:53.166Z")
+        }
+      ],
+      "banana"
+    );
+    const expectedValue = [
+      {
+        beverage: "banana",
+        empId: 111,
+        qty: 4,
+        date: new Date("2019-11-23T20:19:53.166Z")
+      }
+    ];
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give empty array if no record is present for given beverage ", function() {
+    const actualValue = transaction.bvrgQuery(
+      [
+        {
+          beverage: "Orng",
+          empId: 111,
+          qty: 2,
+          date: new Date("2019-11-24T20:19:53.166Z")
+        }
+      ],
+      "banana"
     );
     const expectedValue = [];
     assert.deepStrictEqual(actualValue, expectedValue);
@@ -314,15 +486,14 @@ describe("#performAction()", function() {
       },
       writer: (path, content, encode) => {
         assert.strictEqual(path, "path");
-
         assert.strictEqual(
           content,
-          '[{"beverage":"Or","empId":"2","qty":4,"date":"2019-11-26T06:30:26.943Z"}]'
+          '[{"beverage":"Or","empId":2,"qty":4,"date":"2019-11-26T06:30:26.943Z"}]'
         );
         assert.strictEqual(encode, "utf8");
         callTimes++;
       },
-      dateFunc: () => "2019-11-26T06:30:26.943Z"
+      dateFunc: () => new Date("2019-11-26T06:30:26.943Z")
     };
 
     const actualValue = transaction.performAction(
@@ -341,7 +512,7 @@ describe("#performAction()", function() {
       reader: (path, encode) => {
         assert.strictEqual(path, "path");
         assert.strictEqual(encode, "utf8");
-        return '[{"beverage":"Or","empId":"2","qty":4,"date":"2019-11-26T06:30:26.943Z"}]';
+        return '[{"beverage":"Or","empId":2,"qty":4,"date":"2019-11-26T06:30:26.943Z"}]';
       },
       doesExist: path => {
         assert.strictEqual(path, "path");
