@@ -29,14 +29,14 @@ const performQuery = function(transactionLogs, userOptions) {
 };
 
 const performAction = function(path, helperFuncs, userArgs) {
-  const { reader, writer, doesExist, dateFunc } = helperFuncs;
-  const transactionLogs = utils.getLogs(path, reader, doesExist);
   const parsedArgs = handleInsput.parse(userArgs);
 
   if (!parsedArgs.validation) {
     return "Please give a valid set of input.";
   }
 
+  const { reader, writer, doesExist, dateFunc } = helperFuncs;
+  const transactionLogs = utils.getLogs(path, reader, doesExist);
   const { command, beverage, empId, qty, date } = parsedArgs;
 
   if (command == "--save") {

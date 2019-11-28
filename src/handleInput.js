@@ -18,7 +18,8 @@ const isValidComb = function(parsedVals) {
   const isBvrgGiven = Boolean(parsedVals.beverage);
   const isQtyGiven = Boolean(parsedVals.qty);
   const cmd = parsedVals.command;
-  const isValidCmd = ["--save", "--query"].includes(cmd);
+  const validCmds = ["--save", "--query"];
+  const isValidCmd = validCmds.includes(cmd);
   const isVldSave = cmd == "--save" && isEmpGiven && isBvrgGiven && isQtyGiven;
   const areQueryOptsEnough = isDateGiven || isEmpGiven || isBvrgGiven;
   const isVldQuery = cmd == "--query" && areQueryOptsEnough;
