@@ -2,3 +2,5 @@ node_modules/
 Icon\r
 .nyc_output/
 coverage
+beverageTransactions.json
+

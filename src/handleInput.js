@@ -12,7 +12,7 @@ const isPosInt = function(optVal) {
   return +optVal > 0 && Number.isInteger(+optVal);
 };
 
-const isValidComb = function(parsedVals) {
+const isValidCombo = function(parsedVals) {
   const isEmpGiven = Boolean(parsedVals.empId);
   const isDateGiven = Boolean(parsedVals.date);
   const isBvrgGiven = Boolean(parsedVals.beverage);
@@ -28,13 +28,13 @@ const isValidComb = function(parsedVals) {
 
 const parse = function(userArgs) {
   const parsed = { command: userArgs[0] };
-  const validOpts = ["--beverage", "--empId", "--qty", "--date"];
   const pairValidFunc = {
     "--beverage": isValidBvrg,
     "--empId": isPosInt,
     "--qty": isPosInt,
     "--date": isValidDate
   };
+  const validOpts = Object.keys(pairValidFunc);
 
   for (let index = 1; index < userArgs.length; index += 2) {
     const opt = userArgs[index];
@@ -47,7 +47,7 @@ const parse = function(userArgs) {
 
   parsed.qty && (parsed.qty = +parsed.qty);
   parsed.empId && (parsed.empId = +parsed.empId);
-  parsed.validation = isValidComb(parsed);
+  parsed.validation = isValidCombo(parsed);
   return parsed;
 };
 
