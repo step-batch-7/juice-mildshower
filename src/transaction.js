@@ -2,9 +2,10 @@ const utils = require("./utils.js");
 const handleInsput = require("./handleInput.js");
 
 const insertNewRecord = function(transactionLogs, recordDetails, dateFunc) {
-  recordDetails.date = dateFunc();
-  transactionLogs.push(recordDetails);
-  return { transactionLogs, savedLog: recordDetails };
+  const { beverage, empId, qty } = recordDetails;
+  const newRecord = { beverage, empId, qty, date: dateFunc() };
+  transactionLogs.push(newRecord);
+  return { transactionLogs, savedLog: newRecord };
 };
 
 const empQuery = function(transactionLogs, empId) {
@@ -26,6 +27,18 @@ const getMatchedRecords = function(transactionLogs, queryKeys) {
   return (beverage && bvrgQuery(matchedLogs, beverage)) || matchedLogs;
 };
 
+const performSave = function(parsedArgs, transactionLogs, helperFuncs, path) {
+  const { writer, dateFunc } = helperFuncs;
+  const saveResponse = insertNewRecord(transactionLogs, parsedArgs, dateFunc);
+  utils.writeTransRecords(path, saveResponse.transactionLogs, writer);
+  return utils.getSaveMsg(saveResponse.savedLog);
+};
+
+const performQuery = function(parsedArgs, transactionLogs) {
+  const matchedRecords = getMatchedRecords(transactionLogs, parsedArgs);
+  return utils.getQueryMsg(matchedRecords);
+};
+
 const performAction = function(path, helperFuncs, userArgs) {
   const parsedArgs = handleInsput.parse(userArgs);
 
@@ -33,24 +46,11 @@ const performAction = function(path, helperFuncs, userArgs) {
     return "Please give a valid set of input.";
   }
 
-  const { reader, writer, doesExist, dateFunc } = helperFuncs;
+  const { reader, doesExist } = helperFuncs;
   const transactionLogs = utils.loadTransRecords(path, reader, doesExist);
-  const { command, beverage, empId, qty, date } = parsedArgs;
-
-  if (command == "--save") {
-    const userOptions = { beverage, empId, qty };
-    const saveResponse = insertNewRecord(
-      transactionLogs,
-      userOptions,
-      dateFunc
-    );
-    utils.writeTransRecords(path, saveResponse.transactionLogs, writer);
-    return utils.getSaveMsg(saveResponse.savedLog);
-  }
-
-  const userOptions = { empId, date, beverage };
-  const matchedRecords = getMatchedRecords(transactionLogs, userOptions);
-  return utils.getQueryMsg(matchedRecords);
+  const cmdActions = { "--save": performSave, "--query": performQuery };
+  const commandAction = cmdActions[parsedArgs.command];
+  return commandAction(parsedArgs, transactionLogs, helperFuncs, path);
 };
 
 exports.insertNewRecord = insertNewRecord;
@@ -59,3 +59,5 @@ exports.getMatchedRecords = getMatchedRecords;
 exports.empQuery = empQuery;
 exports.dateQuery = dateQuery;
 exports.bvrgQuery = bvrgQuery;
+exports.performSave = performSave;
+exports.performQuery = performQuery;

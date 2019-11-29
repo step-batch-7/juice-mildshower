@@ -55,3 +55,4 @@ exports.parse = parse;
 exports.isValidBvrg = isValidBvrg;
 exports.isValidDate = isValidDate;
 exports.isPositiveInt = isPositiveInt;
+exports.isValidCombo = isValidCombo;

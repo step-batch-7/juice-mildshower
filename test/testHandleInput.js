@@ -310,3 +310,59 @@ describe("#isPositiveInt()", function() {
     assert.ok(!actualValue);
   });
 });
+
+describe("#isValidCombo", function() {
+  it("should validate arg combination if needed options are given with -save", function() {
+    const actualValue = handleInput.isValidCombo({
+      command: "--save",
+      beverage: "Orange",
+      qty: "4",
+      empId: "1234"
+    });
+    assert.ok(actualValue);
+  });
+
+  it("should validate if needed options are  given with -query", function() {
+    const actualValue = handleInput.isValidCombo({
+      command: "--query",
+      empId: "1234"
+    });
+    assert.ok(actualValue);
+  });
+
+  it("should invalidate arg combination if empId is not given with -save", function() {
+    const actualValue = handleInput.isValidCombo({
+      command: "--save",
+      beverage: "Orange",
+      qty: "4"
+    });
+    assert.notOk(actualValue);
+  });
+
+  it("should invalidate arg combination if beverage is not given with -save", function() {
+    const actualValue = handleInput.isValidCombo({
+      command: "--save",
+      empId: "1234",
+      qty: "4"
+    });
+    assert.notOk(actualValue);
+  });
+
+  it("should invalidate args combination if qty is not given with -save", function() {
+    const actualValue = handleInput.isValidCombo({
+      command: "--save",
+      empId: "1234",
+      beverage: "Orange"
+    });
+
+    assert.notOk(actualValue);
+  });
+
+  it("should invalidate args combination if enough options are not given with -query", function() {
+    const actualValue = handleInput.isValidCombo({
+      command: "--query",
+      qty: "3"
+    });
+    assert.notOk(actualValue);
+  });
+});

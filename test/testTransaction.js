@@ -506,6 +506,7 @@ describe("#performAction()", function() {
     assert.deepStrictEqual(actualValue, expectedValue);
     assert.strictEqual(callTimes, 1);
   });
+
   it("should give matched results if query is given", function() {
     const userArgs = ["--query", "--empId", "2"];
     const helperFuncs = {
@@ -550,6 +551,76 @@ describe("#performAction()", function() {
       userArgs
     );
     const expectedValue = "Please give a valid set of input.";
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+});
+
+describe("#performSave()", function() {
+  it("should save a transaction and write it and give back the save message", function() {
+    let callTimes = 0;
+    const userArgs = {
+      command: "save",
+      beverage: "Or",
+      qty: 4,
+      empId: 2
+    };
+    const helperFuncs = {
+      writer: (path, content, encode) => {
+        assert.strictEqual(path, "path");
+        assert.strictEqual(
+          content,
+          '[{"beverage":"Or","empId":2,"qty":4,"date":"2019-11-26T06:30:26.943Z"}]'
+        );
+        assert.strictEqual(encode, "utf8");
+        callTimes++;
+      },
+      dateFunc: () => new Date("2019-11-26T06:30:26.943Z")
+    };
+
+    const actualValue = transaction.performSave(
+      userArgs,
+      [],
+      helperFuncs,
+      "path"
+    );
+    const expectedValue =
+      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n2,Or,4,2019-11-26T06:30:26.943Z";
+    assert.deepStrictEqual(actualValue, expectedValue);
+    assert.strictEqual(callTimes, 1);
+  });
+});
+
+describe("#performQuery()", function() {
+  it("should give matched results from all records", function() {
+    const userArgs = { command: "query", empId: 2 };
+    const records = [
+      {
+        beverage: "Or",
+        empId: 2,
+        qty: 4,
+        date: new Date("2019-11-26T06:30:26.943Z")
+      }
+    ];
+
+    const actualValue = transaction.performQuery(userArgs, records);
+    const expectedValue =
+      "Employee ID,Beverage,Quantity,Date\n2,Or,4,2019-11-26T06:30:26.943Z\nTotal: 4 Juices";
+    assert.deepStrictEqual(actualValue, expectedValue);
+  });
+
+  it("should give empty list if no record is present for given query", function() {
+    const userArgs = { command: "query", empId: 22 };
+    const records = [
+      {
+        beverage: "Or",
+        empId: 2,
+        qty: 4,
+        date: new Date("2019-11-26T06:30:26.943Z")
+      }
+    ];
+
+    const actualValue = transaction.performQuery(userArgs, records);
+    const expectedValue = "Employee ID,Beverage,Quantity,Date\nTotal: 0 Juice";
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
