@@ -1,13 +1,13 @@
 const transaction = require("../src/transaction");
 const assert = require("chai").assert;
 
-describe("#saveLog()", function() {
+describe("#insertNewRecord()", function() {
   it("should make entry for new transaction to the empty records and give records back", function() {
     const date = new Date();
     const dateFunc = function() {
       return date;
     };
-    const actualValue = transaction.saveLog(
+    const actualValue = transaction.insertNewRecord(
       [],
       { beverage: "Orange", qty: 2, empId: 1111 },
       dateFunc
@@ -24,7 +24,7 @@ describe("#saveLog()", function() {
     const dateFunc = function() {
       return date;
     };
-    const actualValue = transaction.saveLog(
+    const actualValue = transaction.insertNewRecord(
       [{ empId: 1111, beverage: "Orange", qty: 2, date }],
       { beverage: "Banana", qty: 1, empId: 1234 },
       dateFunc
@@ -40,9 +40,9 @@ describe("#saveLog()", function() {
   });
 });
 
-describe("#performQuery()", function() {
+describe("#getMatchedRecords()", function() {
   it("should give matched records if only empId is given", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "Orng",
@@ -83,7 +83,7 @@ describe("#performQuery()", function() {
   });
 
   it("should give matched records if only beverage is given", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "Orng",
@@ -124,7 +124,7 @@ describe("#performQuery()", function() {
   });
 
   it("should give matched records if only date is given", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "banana",
@@ -153,7 +153,7 @@ describe("#performQuery()", function() {
   });
 
   it("should give matched records if date and empId are given", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "banana",
@@ -188,7 +188,7 @@ describe("#performQuery()", function() {
   });
 
   it("should give matched records if beverage and empId are given", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "Orange",
@@ -223,7 +223,7 @@ describe("#performQuery()", function() {
   });
 
   it("should give matched records if beverage and date are given", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "Banana",
@@ -258,7 +258,7 @@ describe("#performQuery()", function() {
   });
 
   it("should give matched records if empId, beverage and date are given", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "Orng",
@@ -293,7 +293,7 @@ describe("#performQuery()", function() {
   });
 
   it("should give empty array if no record present for the query", function() {
-    const actualValue = transaction.performQuery(
+    const actualValue = transaction.getMatchedRecords(
       [
         {
           beverage: "banana",

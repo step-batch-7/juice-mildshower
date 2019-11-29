@@ -1,15 +1,15 @@
-const isValidBvrg = function(optVal) {
-  return typeof optVal === "string" && optVal.length > 0;
+const isValidBvrg = function(optionArg) {
+  return typeof optionArg === "string" && optionArg.length > 0;
 };
 
-const isValidDate = function(optVal) {
+const isValidDate = function(optArg) {
   const vldPttrn = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/);
-  const isVldPttrn = vldPttrn.test(optVal);
-  return isVldPttrn && JSON.stringify(new Date(optVal)).slice(1, 11) == optVal;
+  const isVldPttrn = vldPttrn.test(optArg);
+  return isVldPttrn && JSON.stringify(new Date(optArg)).slice(1, 11) == optArg;
 };
 
-const isPosInt = function(optVal) {
-  return +optVal > 0 && Number.isInteger(+optVal);
+const isPositiveInt = function(optionArg) {
+  return +optionArg > 0 && Number.isInteger(+optionArg);
 };
 
 const isValidCombo = function(parsedVals) {
@@ -19,38 +19,39 @@ const isValidCombo = function(parsedVals) {
   const isQtyGiven = Boolean(parsedVals.qty);
   const cmd = parsedVals.command;
   const isVldSave = cmd == "--save" && isEmpGiven && isBvrgGiven && isQtyGiven;
-  const areQueryOptsEnough = isDateGiven || isEmpGiven || isBvrgGiven;
-  const isVldQuery = cmd == "--query" && areQueryOptsEnough;
+  const isVldQuery =
+    cmd == "--query" && (isDateGiven || isEmpGiven || isBvrgGiven);
   return isVldQuery || isVldSave;
 };
 
 const parse = function(userArgs) {
-  const parsed = { command: userArgs[0] };
+  const parsedArgs = { command: userArgs[0] };
   const pairValidFunc = {
     "--beverage": isValidBvrg,
-    "--empId": isPosInt,
-    "--qty": isPosInt,
+    "--empId": isPositiveInt,
+    "--qty": isPositiveInt,
     "--date": isValidDate
   };
   const validOpts = Object.keys(pairValidFunc);
 
   for (let index = 1; index < userArgs.length; index += 2) {
-    const opt = userArgs[index];
-    const optVal = userArgs[index + 1];
-    const isValidPair = validOpts.includes(opt) && pairValidFunc[opt](optVal);
+    const option = userArgs[index];
+    const optionArg = userArgs[index + 1];
+    const isValidPair =
+      validOpts.includes(option) && pairValidFunc[option](optionArg);
     if (!isValidPair) {
-      return { validation: false };
+      return { isValid: false };
     }
-    parsed[userArgs[index].slice(2)] = userArgs[index + 1];
+    parsedArgs[userArgs[index].slice(2)] = userArgs[index + 1];
   }
 
-  parsed.qty && (parsed.qty = +parsed.qty);
-  parsed.empId && (parsed.empId = +parsed.empId);
-  parsed.validation = isValidCombo(parsed);
-  return parsed;
+  parsedArgs.qty && (parsedArgs.qty = +parsedArgs.qty);
+  parsedArgs.empId && (parsedArgs.empId = +parsedArgs.empId);
+  parsedArgs.isValid = isValidCombo(parsedArgs);
+  return parsedArgs;
 };
 
 exports.parse = parse;
 exports.isValidBvrg = isValidBvrg;
 exports.isValidDate = isValidDate;
-exports.isPosInt = isPosInt;
+exports.isPositiveInt = isPositiveInt;

@@ -1,9 +1,9 @@
 const utils = require("../src/utils");
 const assert = require("chai").assert;
 
-describe("#getLogs()", function() {
+describe("#loadTransRecords()", function() {
   it("should give empty obj if no file exists of the given path", function() {
-    const actualValue = utils.getLogs(
+    const actualValue = utils.loadTransRecords(
       "./NoFile",
       function(arg1, arg2) {
         assert.strictEqual(arg1, "./NoFile");
@@ -20,7 +20,7 @@ describe("#getLogs()", function() {
   });
 
   it("should give content of the file with true flag if file exists", function() {
-    const actualValue = utils.getLogs(
+    const actualValue = utils.loadTransRecords(
       "path",
       function(path, encode) {
         assert.strictEqual(path, "path");
@@ -44,10 +44,14 @@ describe("#getLogs()", function() {
   });
 });
 
-describe("updateRecords()", function() {
+describe("writeTransRecords()", function() {
   it("should make JSON string version of the content and give it to write func", function() {
     let callTimes = 0;
-    utils.updateLogs("path", [{ msg: "Hi" }], function(path, content, encode) {
+    utils.writeTransRecords("path", [{ msg: "Hi" }], function(
+      path,
+      content,
+      encode
+    ) {
       assert.strictEqual(path, "path");
       assert.deepStrictEqual(content, '[{"msg":"Hi"}]');
       assert.strictEqual(encode, "utf8");
@@ -101,10 +105,10 @@ describe("#getQueryMsg()", function() {
   });
 });
 
-describe("#addRecordDetails()", function() {
+describe("#addRecordAsRow()", function() {
   it("should add details of the given recors to the given str", function() {
     const date = new Date();
-    const actualValue = utils.addRecordDetails("hi: ", {
+    const actualValue = utils.addRecordAsRow("hi: ", {
       beverage: "b",
       qty: 1,
       date,

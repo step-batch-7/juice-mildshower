@@ -17,7 +17,7 @@ describe("#parse()", function() {
       beverage: "Orange",
       qty: 4,
       empId: 25343,
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -27,7 +27,7 @@ describe("#parse()", function() {
     const expectedValue = {
       command: "--query",
       empId: 1234,
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -37,7 +37,7 @@ describe("#parse()", function() {
     const expectedValue = {
       command: "--query",
       beverage: "Orange",
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -47,7 +47,7 @@ describe("#parse()", function() {
     const expectedValue = {
       command: "--query",
       date: "2019-02-18",
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -64,7 +64,7 @@ describe("#parse()", function() {
       command: "--query",
       date: "2019-02-18",
       empId: 12,
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -81,7 +81,7 @@ describe("#parse()", function() {
       command: "--query",
       date: "2019-02-18",
       beverage: "Orange",
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -98,7 +98,7 @@ describe("#parse()", function() {
       command: "--query",
       empId: 12,
       beverage: "Orange",
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -118,7 +118,7 @@ describe("#parse()", function() {
       beverage: "Orange",
       date: "2019-02-01",
       empId: 1234,
-      validation: true
+      isValid: true
     };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
@@ -132,7 +132,7 @@ describe("#parse()", function() {
       "4"
     ]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -146,7 +146,7 @@ describe("#parse()", function() {
       "4"
     ]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -160,7 +160,7 @@ describe("#parse()", function() {
       "Orange"
     ]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -168,7 +168,7 @@ describe("#parse()", function() {
   it("should give validation false if enough options are not given with -query", function() {
     const actualValue = handleInput.parse(["--query", "--qty", "3"]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -176,7 +176,7 @@ describe("#parse()", function() {
   it("should give validation false if wrong command is given", function() {
     const actualValue = handleInput.parse(["--abc"]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -190,7 +190,7 @@ describe("#parse()", function() {
       "123"
     ]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -206,7 +206,7 @@ describe("#parse()", function() {
       ""
     ]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -222,7 +222,7 @@ describe("#parse()", function() {
       ""
     ]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -238,7 +238,7 @@ describe("#parse()", function() {
       ""
     ]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -246,7 +246,7 @@ describe("#parse()", function() {
   it("should give validation false if date format is wrong", function() {
     const actualValue = handleInput.parse(["--query", "--date", "2019,02,12"]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -254,7 +254,7 @@ describe("#parse()", function() {
   it("should give validation false if date bound is wrong", function() {
     const actualValue = handleInput.parse(["--query", "--date", "2019-02-29"]);
     const expectedValue = {
-      validation: false
+      isValid: false
     };
     assert.include(actualValue, expectedValue);
   });
@@ -294,19 +294,19 @@ describe("#isValidDate()", function() {
   });
 });
 
-describe("#isPosInt()", function() {
+describe("#isPositiveInt()", function() {
   it("should give true if a positive integer is given", function() {
-    const actualValue = handleInput.isPosInt("5");
+    const actualValue = handleInput.isPositiveInt("5");
     assert.ok(actualValue);
   });
 
   it("should give false if 0 is given", function() {
-    const actualValue = handleInput.isPosInt("0");
+    const actualValue = handleInput.isPositiveInt("0");
     assert.ok(!actualValue);
   });
 
   it("should give false if negative no is given", function() {
-    const actualValue = handleInput.isPosInt("-7");
+    const actualValue = handleInput.isPositiveInt("-7");
     assert.ok(!actualValue);
   });
 });
