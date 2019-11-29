@@ -3,7 +3,7 @@ const isValidBvrg = function(optVal) {
 };
 
 const isValidDate = function(optVal) {
-  const vldPttrn = RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/);
+  const vldPttrn = new RegExp(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/);
   const isVldPttrn = vldPttrn.test(optVal);
   return isVldPttrn && JSON.stringify(new Date(optVal)).slice(1, 11) == optVal;
 };
@@ -18,12 +18,10 @@ const isValidCombo = function(parsedVals) {
   const isBvrgGiven = Boolean(parsedVals.beverage);
   const isQtyGiven = Boolean(parsedVals.qty);
   const cmd = parsedVals.command;
-  const validCmds = ["--save", "--query"];
-  const isValidCmd = validCmds.includes(cmd);
   const isVldSave = cmd == "--save" && isEmpGiven && isBvrgGiven && isQtyGiven;
   const areQueryOptsEnough = isDateGiven || isEmpGiven || isBvrgGiven;
   const isVldQuery = cmd == "--query" && areQueryOptsEnough;
-  return isValidCmd && (isVldQuery || isVldSave);
+  return isVldQuery || isVldSave;
 };
 
 const parse = function(userArgs) {
@@ -39,7 +37,8 @@ const parse = function(userArgs) {
   for (let index = 1; index < userArgs.length; index += 2) {
     const opt = userArgs[index];
     const optVal = userArgs[index + 1];
-    if (!validOpts.includes(opt) || !pairValidFunc[opt](optVal)) {
+    const isValidPair = validOpts.includes(opt) && pairValidFunc[opt](optVal);
+    if (!isValidPair) {
       return { validation: false };
     }
     parsed[userArgs[index].slice(2)] = userArgs[index + 1];
