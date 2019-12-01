@@ -5,7 +5,7 @@
   "main": "beverage.js",
   "scripts": {
     "start": "node beverage.js",
-    "test": "nyc mocha"
+    "test": "nyc mocha && ./runAppTests.sh AppTests/*.tst"
   },
   "author": "Sudipta Kundu",
   "license": "ISC",
