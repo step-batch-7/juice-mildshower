@@ -1,5 +1,5 @@
 const getPath = function(env) {
-  return env.JS_STORE_PATH || "./beverageTransactions.json";
+  return env.JS_STORE_PATH || "./data/beverageTransactions.json";
 };
 
 const getDateFunc = function(env) {

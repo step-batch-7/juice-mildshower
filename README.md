@@ -50,9 +50,9 @@
 
 > **Data Store Path**:
 >
-> You can provide a path to store transaction details or it will make a file named `beverageTransaction.json`
+> You can provide a path to store transaction details or it will make a file named `beverageTransaction.json` inside `data` directory.
 >
-> To provide your own data store path you can set environment variable `JS_STORE_PATH`
+> To provide your own data store path you can set environment variable `JS_STORE_PATH`.
 >
 > > syntax: `export JS_STORE_PATH=<yourOwnPath>`
 
