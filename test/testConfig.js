@@ -10,7 +10,7 @@ describe("#getPath()", function() {
 
   it("should give default path if path is not confugured using env variable", function() {
     const actualValue = config.getPath({});
-    const expectedValue = "./beverageTransactions.json";
+    const expectedValue = "./data/beverageTransactions.json";
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
