@@ -1,4 +1,4 @@
-const assert = require("assert");
+const assert = require("chai").assert;
 const config = require("../src/config");
 
 describe("#getPath()", function() {

@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 const convertDateStrToObj = function(record) {
   record.date = new Date(record.date);
   return record;
@@ -52,12 +50,14 @@ const doesDateMatch = function(date) {
   };
 };
 
-exports.doesKeyValMatch = doesKeyValMatch;
-exports.doesDateMatch = doesDateMatch;
-exports.getQueryMsg = getQueryMsg;
-exports.getSaveMsg = getSaveMsg;
-exports.loadTransRecords = loadTransRecords;
-exports.writeTransRecords = writeTransRecords;
-exports.addRecordAsRow = addRecordAsRow;
-exports.countQuantities = countQuantities;
-exports.convertDateStrToObj = convertDateStrToObj;
+module.exports = {
+  doesKeyValMatch,
+  doesDateMatch,
+  getQueryMsg,
+  getSaveMsg,
+  loadTransRecords,
+  writeTransRecords,
+  addRecordAsRow,
+  countQuantities,
+  convertDateStrToObj
+};

@@ -1,5 +1,5 @@
-const utils = require("../src/utils");
 const assert = require("chai").assert;
+const utils = require("../src/utils");
 
 describe("#loadTransRecords()", function() {
   it("should give empty obj if no file exists of the given path", function() {

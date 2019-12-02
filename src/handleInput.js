@@ -51,8 +51,10 @@ const parse = function(userArgs) {
   return parsedArgs;
 };
 
-exports.parse = parse;
-exports.isValidBvrg = isValidBvrg;
-exports.isValidDate = isValidDate;
-exports.isPositiveInt = isPositiveInt;
-exports.isValidCombo = isValidCombo;
+module.exports = {
+  parse,
+  isValidBvrg,
+  isValidDate,
+  isPositiveInt,
+  isValidCombo
+};

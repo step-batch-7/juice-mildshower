@@ -1,5 +1,5 @@
-const transaction = require("../src/transaction");
 const assert = require("chai").assert;
+const transaction = require("../src/transaction");
 
 describe("#insertNewRecord()", function() {
   it("should make entry for new transaction to the empty records and give records back", function() {

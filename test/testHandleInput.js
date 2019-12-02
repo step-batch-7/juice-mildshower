@@ -1,5 +1,5 @@
-const handleInput = require("../src/handleInput.js");
 const assert = require("chai").assert;
+const handleInput = require("../src/handleInput.js");
 
 describe("#parse()", function() {
   it("should give object with proper aguements if correct save format is given", function() {

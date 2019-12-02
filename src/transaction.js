@@ -53,11 +53,13 @@ const performAction = function(path, helperFuncs, userArgs) {
   return commandAction(parsedArgs, transactionLogs, helperFuncs, path);
 };
 
-exports.insertNewRecord = insertNewRecord;
-exports.performAction = performAction;
-exports.getMatchedRecords = getMatchedRecords;
-exports.empQuery = empQuery;
-exports.dateQuery = dateQuery;
-exports.bvrgQuery = bvrgQuery;
-exports.performSave = performSave;
-exports.performQuery = performQuery;
+module.exports = {
+  insertNewRecord,
+  performAction,
+  getMatchedRecords,
+  empQuery,
+  dateQuery,
+  bvrgQuery,
+  performSave,
+  performQuery
+};
